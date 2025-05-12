@@ -26,20 +26,12 @@ public class UrlService {
                 return ResponseEntity.status(401).body("Url already exist");
             }
 
-            Random generator = new Random();
-            StringBuilder stringBuilder = new StringBuilder();
-            String character = "abcdefghijklmnopqrstuvwxyz";
-
-            for(int i = 0; i < 5; i++){
-                int indice = generator.nextInt(character.length());
-                stringBuilder.append(character.charAt(indice));
-            }
-
+            String id = createUrlId();
             String shortedUrl = httpServletRequest
-                    .getRequestURL().toString().concat(stringBuilder.toString());
+                    .getRequestURL().toString().concat(id);
 
             Url url = new Url();
-            url.setShortedId(stringBuilder.toString());
+            url.setShortedId(id);
             url.setOriginalUrl(originalUrl);
             urlRepository.save(url);
 
@@ -68,4 +60,16 @@ public class UrlService {
         }
     }
 
+    public String createUrlId(){
+        Random random = new Random();
+        StringBuilder stringBuilder = new StringBuilder();
+        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPKRSTUVWXYZ";
+
+        for(int i = 0; i < 5; i++){
+            int index = random.nextInt(characters.length());
+            stringBuilder.append(characters.charAt(index));
+        }
+
+        return stringBuilder.toString();
+    }
 }
